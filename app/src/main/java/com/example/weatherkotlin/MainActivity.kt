@@ -5,11 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,14 +40,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-data class CityWeather(
-    val name: String,
-    val condition: String,
-    val temp: String,
-    val minMax: String
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
