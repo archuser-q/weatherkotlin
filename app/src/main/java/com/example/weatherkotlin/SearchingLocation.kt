@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.weatherkotlin.components.SearchTextField
 import com.example.weatherkotlin.components.SearchingResult
 import com.example.weatherkotlin.data.LocationData
@@ -29,7 +30,7 @@ data class LocationItem(
 )
 
 @Composable
-fun SearchingLocation(){
+fun SearchingLocation(navController: NavController){
     var searchQuery by remember { mutableStateOf("") }
     var locations by remember { mutableStateOf(LocationData.defaultLocations) }
 
@@ -55,11 +56,12 @@ fun SearchingLocation(){
             SearchTextField(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
+                onClick = {},
                 modifier = Modifier
                     .weight(1f)
             )
             TextButton(
-                onClick = { searchQuery = "" },
+                onClick = { navController.popBackStack() },
             ) {
                 Text(
                     text = "Cancel",

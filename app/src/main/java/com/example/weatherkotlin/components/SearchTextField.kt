@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 fun SearchTextField(
     value: String,
     onValueChange: (String) -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TextField(
