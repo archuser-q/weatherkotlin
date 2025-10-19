@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MaterialTheme {
-                SearchingLocation()
+                MainScreen()
             }
         }
     }
@@ -112,6 +112,6 @@ fun MainScreen() {
 @Composable
 fun MainScreenPreview() {
     MaterialTheme {
-        SearchingLocation()
+        MainScreen()
     }
 }
