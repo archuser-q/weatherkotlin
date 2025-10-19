@@ -74,10 +74,10 @@ fun MainScreen(navController: NavController) {
                 SearchTextField(
                     value = searchText.value,
                     onValueChange = { searchText.value = it },
-                    onClick = {}, // không dùng click
+                    onClick = {},
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 10.dp)
+                        .padding(horizontal = 15.dp)
                         .onFocusChanged { focusState ->
                             if (focusState.isFocused && !hasNavigated) {
                                 hasNavigated = true
@@ -96,7 +96,7 @@ fun MainScreen(navController: NavController) {
                 )
             }
 
-            items(2) {
+            items(0) {
                 WeatherCard()
             }
         }
