@@ -1,5 +1,6 @@
 package com.example.weatherkotlin
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherkotlin.components.SearchTextField
 import com.example.weatherkotlin.components.SearchingResult
+import com.example.weatherkotlin.data.LocationData
 
 data class LocationItem(
     val name: String,
@@ -27,11 +29,7 @@ data class LocationItem(
 @Composable
 fun SearchingLocation(){
     var searchQuery by remember { mutableStateOf("") }
-    var locations by remember { mutableStateOf(listOf(
-        LocationItem("Hà Nội", "Bắc Bộ", 21.0285, 105.8542),
-        LocationItem("TP Hồ Chí Minh", "Nam Bộ", 10.7769, 106.7009),
-        LocationItem("Đà Nẵng", "Trung Bộ", 16.0544, 108.2022)
-    )) }
+    var locations by remember { mutableStateOf(LocationData.defaultLocations) }
 
     val filteredLocations = if (searchQuery.isBlank()) {
         emptyList()
@@ -68,13 +66,23 @@ fun SearchingLocation(){
             }
         }
         if (searchQuery.isNotBlank()) {
-            LazyColumn(
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 12.dp)
+                    .padding(horizontal = 6.dp, vertical = 12.dp),
+                shape = RoundedCornerShape(8.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                )
             ) {
-                items(filteredLocations) { location ->
-                    SearchingResult(location)
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    items(filteredLocations) { location ->
+                        SearchingResult(location)
+                    }
                 }
             }
         } else {
@@ -90,7 +98,7 @@ fun SearchingLocation(){
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(70.dp)
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = 6.dp)
                     .padding(top = 16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer
