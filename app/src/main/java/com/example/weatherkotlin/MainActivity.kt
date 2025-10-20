@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
 
             NavHost(
                 navController = navController,
-                startDestination = "MainScreen",
+                startDestination = "LocationDetail",
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Left,
@@ -47,6 +47,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 composable("MainScreen") { MainScreen(navController) }
                 composable("SearchingLocation") { SearchingLocation(navController) }
+                composable("LocationDetail") {LocationDetail(navController)}
             }
         }
     }

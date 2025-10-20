@@ -34,7 +34,7 @@ fun SearchingResult(location: LocationItem) {
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Region: ${location.region}",
+            text = "${location.region}",
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
         )
