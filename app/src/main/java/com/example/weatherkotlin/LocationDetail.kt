@@ -34,6 +34,7 @@ import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material.icons.filled.WbCloudy
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import com.example.weatherkotlin.components.WeatherRow
 
 
@@ -92,7 +93,7 @@ fun LocationDetail(navController: NavController){
                     )
                     Text(
                         text = "26°",
-                        fontSize = 130.sp
+                        fontSize = 135.sp
                     )
                     Text(
                         text = "Clear 30°/23°",
@@ -143,7 +144,12 @@ fun LocationDetail(navController: NavController){
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 5.dp)
-                                .height(52.dp)
+                                .height(52.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFFE0E0E0),
+                                contentColor = Color.Black
+                            ),
+                            shape = RoundedCornerShape(16.5.dp)
                         ) {
                             Text("5-day forecast")
                         }
