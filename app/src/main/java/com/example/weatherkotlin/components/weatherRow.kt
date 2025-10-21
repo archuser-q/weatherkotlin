@@ -40,12 +40,12 @@ fun WeatherRow(
                 .padding(horizontal = 4.dp)
         )
         Text(
-            text = highTemp,
+            text = lowTemp,
             color = Color.Black,
             modifier = Modifier.weight(1f)
         )
         Text(
-            text = lowTemp,
+            text = highTemp,
             color = Color.Gray
         )
     }

@@ -102,60 +102,6 @@ fun LocationDetail(navController: NavController){
                     )
                 }
             }
-            item {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .padding(top = 260.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(16.5.dp)
-                    ) {
-                        WeatherRow(
-                            day = "Friday",
-                            icon = Icons.Default.WbSunny,
-                            highTemp = "30°",
-                            lowTemp = "23°",
-                            iconTint = Color(0xFFFFC107)
-                        )
-                        WeatherRow(
-                            day = "Saturday",
-                            icon = Icons.Default.Cloud,
-                            highTemp = "28°",
-                            lowTemp = "22°",
-                            iconTint = Color.Gray
-                        )
-                        WeatherRow(
-                            day = "Sunday",
-                            icon = Icons.Default.WbCloudy,
-                            highTemp = "27°",
-                            lowTemp = "21°",
-                            iconTint = Color(0xFF90CAF9)
-                        )
-
-                        Button(
-                            onClick = {},
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 5.dp)
-                                .height(52.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFFE0E0E0),
-                                contentColor = Color.Black
-                            ),
-                            shape = RoundedCornerShape(16.5.dp)
-                        ) {
-                            Text("5-day forecast")
-                        }
-                    }
-                }
-            }
         }
     }
 }
