@@ -1,5 +1,9 @@
 package com.example.weatherkotlin
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,6 +43,7 @@ import androidx.navigation.NavController
 import com.example.weatherkotlin.components.SearchTextField
 import com.example.weatherkotlin.components.WeatherCard
 import com.example.weatherkotlin.model.WeatherViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,6 +54,7 @@ fun MainScreen(
     val locations by viewModel.locations.collectAsState()
     val searchText = remember { mutableStateOf("") }
     var hasNavigated by remember { mutableStateOf(false) }
+    var removedItems by remember { mutableStateOf(setOf<String>()) }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -117,47 +123,61 @@ fun MainScreen(
                 key = { index -> locations[index].name }
             ) { index ->
                 val location = locations[index]
-                val dismissState = rememberSwipeToDismissBoxState(
-                    confirmValueChange = { dismissValue ->
-                        if (dismissValue == SwipeToDismissBoxValue.EndToStart) {
-                            viewModel.removeLocation(location.name)
-                            true
-                        } else {
-                            false
-                        }
-                    }
-                )
-
-                SwipeToDismissBox(
-                    state = dismissState,
-                    backgroundContent = {
-                        Card(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(start = 20.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = Color.Red
-                            ),
-                            shape = RoundedCornerShape(12.dp)  // THÊM ROUNDED
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(horizontal = 20.dp),
-                                contentAlignment = androidx.compose.ui.Alignment.CenterEnd
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = "Delete",
-                                    tint = Color.White,
-                                    modifier = Modifier.size(32.dp)
-                                )
+                val isVisible = !removedItems.contains(location.name)
+                AnimatedVisibility(  // WRAP TRONG AnimatedVisibility
+                    visible = isVisible,
+                    exit = shrinkVertically(
+                        animationSpec = tween(300)
+                    ) + fadeOut(
+                        animationSpec = tween(300)
+                    )
+                ) {
+                    val dismissState = rememberSwipeToDismissBoxState(
+                        confirmValueChange = { dismissValue ->
+                            if (dismissValue == SwipeToDismissBoxValue.EndToStart) {
+                                removedItems = removedItems + location.name
+                                kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
+                                    kotlinx.coroutines.delay(300)
+                                    viewModel.removeLocation(location.name)
+                                }
+                                true
+                            } else {
+                                false
                             }
                         }
-                    },
-                    enableDismissFromStartToEnd = false
-                ) {
-                    WeatherCard(location)
+                    )
+
+                    SwipeToDismissBox(
+                        state = dismissState,
+                        backgroundContent = {
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(start = 20.dp),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = Color.Red
+                                ),
+                                shape = RoundedCornerShape(12.dp)  // THÊM ROUNDED
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(horizontal = 20.dp),
+                                    contentAlignment = androidx.compose.ui.Alignment.CenterEnd
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Delete",
+                                        tint = Color.White,
+                                        modifier = Modifier.size(32.dp)
+                                    )
+                                }
+                            }
+                        },
+                        enableDismissFromStartToEnd = false
+                    ) {
+                        WeatherCard(location)
+                    }
                 }
             }
         }
