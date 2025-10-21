@@ -1,6 +1,7 @@
 package com.example.weatherkotlin
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
@@ -37,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -150,14 +152,25 @@ fun MainScreen(
                     SwipeToDismissBox(
                         state = dismissState,
                         backgroundContent = {
+                            val targetAlpha =
+                                if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart ||
+                                    dismissState.currentValue == SwipeToDismissBoxValue.EndToStart
+                                ) 1f
+                                else 0.3f
+
+                            val animatedAlpha by animateFloatAsState(
+                                targetValue = targetAlpha,
+                                animationSpec = tween(durationMillis = 100)
+                            )
                             Card(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(start = 20.dp),
+                                    .padding(start = 20.dp)
+                                    .graphicsLayer(alpha = animatedAlpha),
                                 colors = CardDefaults.cardColors(
                                     containerColor = Color.Red
                                 ),
-                                shape = RoundedCornerShape(12.dp)  // THÊM ROUNDED
+                                shape = RoundedCornerShape(12.dp)
                             ) {
                                 Box(
                                     modifier = Modifier
