@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,10 +28,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.weatherkotlin.components.SearchTextField
 import com.example.weatherkotlin.components.WeatherCard
+import com.example.weatherkotlin.model.WeatherViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen(
+    navController: NavController,
+    viewModel: WeatherViewModel
+) {
+    val locations by viewModel.locations.collectAsState()
     val searchText = remember { mutableStateOf("") }
     var hasNavigated by remember { mutableStateOf(false) }
     Scaffold(
@@ -96,8 +102,9 @@ fun MainScreen(navController: NavController) {
                 )
             }
 
-            items(0) {
-                WeatherCard()
+            items(locations.size) { index ->
+                val location = locations[index]
+                WeatherCard(location)
             }
         }
     }

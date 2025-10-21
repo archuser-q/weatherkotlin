@@ -6,11 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.weatherkotlin.model.WeatherViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +20,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
+            val viewModel: WeatherViewModel = viewModel()
 
             NavHost(
                 navController = navController,
@@ -47,7 +50,7 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             ) {
-                composable("MainScreen") { MainScreen(navController) }
+                composable("MainScreen") { MainScreen(navController, viewModel) }
                 composable("SearchingLocation") { SearchingLocation(navController) }
                 composable(
                     route = "LocationDetail/{name}/{lat}/{lon}",
@@ -60,7 +63,7 @@ class MainActivity : ComponentActivity() {
                     val name = backStackEntry.arguments?.getString("name") ?: ""
                     val lat = backStackEntry.arguments?.getFloat("lat") ?: 0f
                     val lon = backStackEntry.arguments?.getFloat("lon") ?: 0f
-                    LocationDetail(navController, name, lat.toDouble(), lon.toDouble())
+                    LocationDetail(navController, name, lat.toDouble(), lon.toDouble(), viewModel)
                 }
                 composable("DetailForecast") {forecast(navController)}
             }

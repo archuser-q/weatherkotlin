@@ -15,9 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.weatherkotlin.model.WeatherLocation
 
 @Composable
-fun WeatherCard() {
+fun WeatherCard(location: WeatherLocation) {
     Card(
         modifier = Modifier
             .fillMaxWidth(0.945f)
@@ -39,12 +40,12 @@ fun WeatherCard() {
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Hanoi",
+                    text = location.name,
                     fontSize = 28.sp,
                     color = Color.White,
                 )
                 Text(
-                    text = "Cloudy",
+                    text = location.description,
                     fontSize = 14.sp,
                     color = Color.White.copy(alpha = 0.7f)
                 )
@@ -55,13 +56,13 @@ fun WeatherCard() {
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "25°",
+                    text = "${location.currentTemp.toInt()}°",
                     fontSize = 40.sp,
                     color = Color.White,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Text(
-                    text = "31° / 23°",
+                    text = "${location.maxTemp.toInt()}° / ${location.minTemp.toInt()}°",
                     fontSize = 12.sp,
                     color = Color.White.copy(alpha = 0.7f)
                 )

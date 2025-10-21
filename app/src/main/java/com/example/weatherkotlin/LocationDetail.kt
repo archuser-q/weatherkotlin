@@ -35,6 +35,7 @@ import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material.icons.filled.WbCloudy
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,6 +43,8 @@ import androidx.compose.runtime.setValue
 import com.example.weatherkotlin.components.WeatherRow
 // Thêm import này vào đầu file
 import androidx.compose.runtime.LaunchedEffect
+import com.example.weatherkotlin.model.WeatherLocation
+import com.example.weatherkotlin.model.WeatherViewModel
 import com.example.weatherkotlin.utils.RetrofitInstance
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,8 +53,10 @@ fun LocationDetail(
     navController: NavController,
     locationName: String,
     latitude: Double,
-    longitude: Double
+    longitude: Double,
+    viewModel: WeatherViewModel
 ){
+    val isLocationAdded = viewModel.hasLocation(locationName)
     var currentTemp by remember { mutableStateOf<Double?>(null) }
     var maxTemp by remember { mutableStateOf<Double?>(null) }
     var minTemp by remember { mutableStateOf<Double?>(null) }
@@ -65,36 +70,88 @@ fun LocationDetail(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(
-                modifier = Modifier.padding(bottom = 16.dp),
-                title = { Text("") },
-                actions = {
-                    IconButton(
-                        onClick = { },
-                        modifier = Modifier.padding(start = 16.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Quay lại",
-                            modifier = Modifier
-                                .size(32.dp)
-                                .padding(top = 2.dp)
-                        )
+            if(!isLocationAdded){
+                TopAppBar(
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    title = { Text("") },
+                    navigationIcon = {
+                        Button(
+                            onClick = { navController.popBackStack() },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Transparent,
+                                contentColor = Color.Red
+                            )
+                        ) {
+                            Text("Cancel")
+                        }
+                    },
+                    actions = {
+                        Button(
+                            onClick = {
+                                currentTemp?.let { current ->
+                                    maxTemp?.let { max ->
+                                        minTemp?.let { min ->
+                                            viewModel.addLocation(
+                                                WeatherLocation(
+                                                    name = locationName,
+                                                    latitude = latitude,
+                                                    longitude = longitude,
+                                                    currentTemp = current,
+                                                    maxTemp = max,
+                                                    minTemp = min,
+                                                    description = "Clear"
+                                                )
+                                            )
+                                            navController.navigate("MainScreen") {
+                                                popUpTo("MainScreen") { inclusive = false }
+                                                launchSingleTop = true
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Transparent,
+                                contentColor = Color.Blue
+                            )
+                        ) {
+                            Text("Add")
+                        }
                     }
-                    IconButton(
-                        onClick = {  },
-                        modifier = Modifier.padding(start = 8.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = "Tùy chọn",
-                            modifier = Modifier
-                                .size(28.dp)
-                                .padding(top = 2.dp)
-                        )
+                )
+            }
+            else{
+                TopAppBar(
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    title = { Text("") },
+                    actions = {
+                        IconButton(
+                            onClick = { },
+                            modifier = Modifier.padding(start = 16.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Quay lại",
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .padding(top = 2.dp)
+                            )
+                        }
+                        IconButton(
+                            onClick = {  },
+                            modifier = Modifier.padding(start = 8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = "Tùy chọn",
+                                modifier = Modifier
+                                    .size(28.dp)
+                                    .padding(top = 2.dp)
+                            )
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     ){innerPadding ->
         LazyColumn(
