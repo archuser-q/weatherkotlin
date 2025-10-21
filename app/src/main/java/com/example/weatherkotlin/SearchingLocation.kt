@@ -82,7 +82,12 @@ fun SearchingLocation(navController: NavController){
                         .padding(16.dp)
                 ) {
                     items(filteredLocations) { location ->
-                        SearchingResult(location)
+                        SearchingResult(
+                            location = location,
+                            onClick = {
+                                navController.navigate("LocationDetail/${location.name}/${location.latitude}/${location.longitude}")
+                            }
+                        )
                     }
                 }
             }

@@ -35,12 +35,33 @@ import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material.icons.filled.WbCloudy
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.example.weatherkotlin.components.WeatherRow
-
+// Thêm import này vào đầu file
+import androidx.compose.runtime.LaunchedEffect
+import com.example.weatherkotlin.utils.RetrofitInstance
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LocationDetail(navController: NavController){
+fun LocationDetail(
+    navController: NavController,
+    locationName: String,
+    latitude: Double,
+    longitude: Double
+){
+    var currentTemp by remember { mutableStateOf<Double?>(null) }
+    var maxTemp by remember { mutableStateOf<Double?>(null) }
+    var minTemp by remember { mutableStateOf<Double?>(null) }
+    LaunchedEffect(latitude, longitude) {
+        fetchWeatherData(latitude, longitude) { current, max, min ->
+            currentTemp = current
+            maxTemp = max
+            minTemp = min
+        }
+    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -89,19 +110,36 @@ fun LocationDetail(navController: NavController){
                         .padding(horizontal = 20.dp)
                 ){
                     Text(
-                        text = "Dong Da"
+                        text = locationName
                     )
                     Text(
-                        text = "26°",
+                        text = "${currentTemp?.toInt() ?: "--"}°",
                         fontSize = 135.sp
                     )
                     Text(
-                        text = "Clear 30°/23°",
+                        text = "Clear ${maxTemp?.toInt() ?: "--"}°/${minTemp?.toInt() ?: "--"}°",
                         fontSize = 20.sp,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )
                 }
             }
         }
+    }
+}
+suspend fun fetchWeatherData(
+    lat: Double,
+    lon: Double,
+    onResult: (Double, Double, Double) -> Unit
+) {
+    try {
+        val response = RetrofitInstance.api.getWeather(lat, lon)
+        val currentTemp = response.current.temperature
+        val maxTemp = response.daily.temperatureMax[0]
+        val minTemp = response.daily.temperatureMin[0]
+
+        onResult(currentTemp, maxTemp, minTemp)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        onResult(0.0, 0.0, 0.0)
     }
 }

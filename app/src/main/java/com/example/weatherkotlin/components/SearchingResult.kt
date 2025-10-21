@@ -17,14 +17,14 @@ import androidx.compose.ui.unit.sp
 import com.example.weatherkotlin.LocationItem
 
 @Composable
-fun SearchingResult(location: LocationItem) {
+fun SearchingResult(location: LocationItem, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
-            ) { }
+            ) { onClick() }
     ) {
         Text(
             text = location.name,
