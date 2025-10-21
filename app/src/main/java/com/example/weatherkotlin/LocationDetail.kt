@@ -1,8 +1,17 @@
 package com.example.weatherkotlin
 
+import android.health.connect.datatypes.units.Percentage
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,14 +33,27 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import com.example.weatherkotlin.model.WeatherLocation
 import com.example.weatherkotlin.model.WeatherViewModel
 import com.example.weatherkotlin.utils.RetrofitInstance
+import androidx.compose.ui.unit.TextUnit
+import com.example.weatherkotlin.components.CircularProgressBar
+import kotlin.time.Duration
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -164,6 +186,68 @@ fun LocationDetail(
                         fontSize = 20.sp,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )
+                }
+            }
+            item{
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Card(
+                        modifier = Modifier
+                            .weight(1f),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text(
+                                text = "UV",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Text(
+                                text = "Weak",
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Medium,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .padding(start=50.dp)
+                            ){
+                                CircularProgressBar(percentage = 1f, number=100)
+                            }
+                        }
+                    }
+
+                    Card(
+                        modifier = Modifier.weight(1f),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text(
+                                text = "Humidity",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Text(
+                                text = "58%",
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Medium,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                            Box(
+                                modifier = Modifier.padding(start=50.dp)
+                            ){
+                                CircularProgressBar(percentage = 1f, number=100)
+                            }
+                        }
+                    }
                 }
             }
         }
